@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Inscription avec Google</title>
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+  <script>
+    function handleCredentialResponse(response) {
+      // Decode JWT token or send to backend for verification.
+      // For demonstration we store the credential in localStorage
+      localStorage.setItem('googleCredential', response.credential);
+      // Simple display to show user is signed in
+      document.getElementById('status').textContent = 'Utilisateur connecté via Google.';
+    }
+
+    window.onload = function() {
+      const saved = localStorage.getItem('googleCredential');
+      if (saved) {
+        document.getElementById('status').textContent = 'Utilisateur déjà connecté via Google.';
+      } else {
+        google.accounts.id.initialize({
+          client_id: 'YOUR_GOOGLE_CLIENT_ID',
+          callback: handleCredentialResponse
+        });
+        google.accounts.id.renderButton(
+          document.getElementById('buttonDiv'),
+          { theme: 'outline', size: 'large' } // customization
+        );
+      }
+    }
+  </script>
+</head>
+<body>
+  <h1>Inscription avec Google</h1>
+  <div id="buttonDiv"></div>
+  <p id="status"></p>
+</body>
+</html>
